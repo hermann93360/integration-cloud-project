@@ -20,8 +20,11 @@ jobs:
           java-version: '23'
           cache: gradle
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
-        run: sudo ./gradlew clean build
+        run: ./gradlew clean build
 
   test:
     runs-on: ubuntu-latest
@@ -36,6 +39,9 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
           cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       - name: Run tests
         run: ./gradlew test
@@ -99,7 +105,7 @@ jobs:
         run: kubectl get nodes
       - name: Deploy the image to minikube
         run: |
-          docker pull filliolaud/spring-rag:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/spring-rag:latest
           kubectl apply -f src/main/k8s/deployment.yml
       - name: Get Kubernetes service URL
         run: |
